@@ -1,32 +1,34 @@
-const uniqid = require('uniqid');
+const mongoose = require('mongoose');
 
-class Cube {
-
-  static #cubes = [
-    {
-      id: 'four-by-four-by-four',
-      name: '4x4x4',
-      description: 'magic cube',
-      imageUrl: 'https://logicbg.com/wp-content/uploads/2021/01/rubik-kub-4x4x4-QiYi-Speed-Cube-sinya-i-zhalta.jpg',
-      difficulty: 4
-    }
-  ];
-
-  constructor(name, description, imageUrl, difficulty) {
-    this.id = uniqid();
-    this.name = name;
-    this.description = description;
-    this.imageUrl = imageUrl;
-    this.difficulty = difficulty;
+const cubeSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
+    maxlength: 100,
+  },
+  imageUrl: {
+    type: String,
+    required: true,
+    validate: /^https?:\/\//,
+    //   validate: {
+    //     validator: function (value) {
+    //       return /^https?:\/\//.test(value);
+    //     },
+    //     message: 'Image Url is invalid!'
+    //   }
+  },
+  difficulty: {
+    type: Number,
+    required: true,
+    min: 1,
+    max: 5,
   }
+});
 
-  static get cubes() {
-    return Cube.#cubes.slice();
-  }
-
-  static add(cube) {
-    Cube.#cubes.push(cube);
-  }
-}
+const Cube = mongoose.model('Cube', cubeSchema);
 
 module.exports = Cube;
