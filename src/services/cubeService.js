@@ -1,19 +1,18 @@
 const Cube = require('../models/Cube');
 
-const cubeDb = [];
+const getAll = () => Cube.find({}).lean();
 
-const getAll = () => Cube.cubes;
+const getOne = (cubeId) => Cube.findById(cubeId).lean();
+const getOneDetailed = (cubeId) => Cube.findById(cubeId).populate('accessories').lean();
 
 const create = (name, description, imageUrl, difficulty) => {
-  let cube = new Cube(name, description, imageUrl, difficulty);
+  let cube = new Cube({name, description, imageUrl, difficulty});
 
-  Cube.add(cube);
+  return cube.save();
 };
 
-const getOne = (cubeId) => Cube.cubes.find(cube => cube.id = cubeId);
-
-const search = (name, from, to) => {
-  let result = Cube.cubes;
+const search = async (name, from, to) => {
+  let result = await getAll();
 
   if (name) {
     result = result.filter(x => x.name.toLowerCase().includes(name.toLowerCase()));
@@ -29,11 +28,22 @@ const search = (name, from, to) => {
 
   return result;
 };
+
+const attachAccessory = async (cubeId, accessoryId) => {
+  let cube = await Cube.findById(cubeId);
+
+  cube.accessories.push(accessoryId);
+
+  return cube.save();
+};
+
 const cubeService = {
-  create,
   getAll,
   getOne,
+  getOneDetailed,
+  create,
   search,
+  attachAccessory,
 };
 
 module.exports = cubeService;
