@@ -6,7 +6,7 @@ const getOne = (cubeId) => Cube.findById(cubeId).lean();
 const getOneDetailed = (cubeId) => Cube.findById(cubeId).populate('accessories').lean();
 
 const create = (name, description, imageUrl, difficulty) => {
-  let cube = new Cube({name, description, imageUrl, difficulty});
+  let cube = new Cube({ name, description, imageUrl, difficulty });
 
   return cube.save();
 };
@@ -37,6 +37,10 @@ const attachAccessory = async (cubeId, accessoryId) => {
   return cube.save();
 };
 
+const editById = (cubeId, cube) => Cube.findByIdAndUpdate(cubeId, cube);
+
+const deleteById = (cubeId) => Cube.findByIdAndDelete(cubeId);
+
 const cubeService = {
   getAll,
   getOne,
@@ -44,6 +48,8 @@ const cubeService = {
   create,
   search,
   attachAccessory,
+  editById,
+  deleteById,
 };
 
 module.exports = cubeService;
