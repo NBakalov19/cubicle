@@ -1,10 +1,9 @@
 const User = require('../models/User');
-const bcrypt = require('bcrypt');
 const { jwtSign } = require('../utils/jwtUtils');
 const { JWT_SECRET } = require('../constants');
 
 const register = (username, password, repeatPassword) => {
-  return User.create({ username, password });
+  return User.create({ username, password, repeatPassword });
 };
 
 // exports.register = function (username, password, repeatPassword) {
@@ -14,7 +13,7 @@ const register = (username, password, repeatPassword) => {
 
 const login = async (username, password) => {
   const user = await User.findOne({ username });
-  const isValid = await bcrypt.compare(password, user.password);
+  const isValid = await user.validatePassword(password);
 
   return isValid ? user : null;
 
@@ -27,7 +26,8 @@ const login = async (username, password) => {
   //                return user;
   //              }
   //              throw { message: 'Cannot find username or password' };
-  //            });
+  //            })
+  //            .catch(() => null);
 };
 
 const createToken = (user) => {

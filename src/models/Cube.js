@@ -8,6 +8,7 @@ const cubeSchema = new mongoose.Schema({
   description: {
     type: String,
     required: true,
+    minlength: 20,
     maxlength: 100,
   },
   imageUrl: {
@@ -32,7 +33,11 @@ const cubeSchema = new mongoose.Schema({
       type: mongoose.Types.ObjectId,
       ref: 'Accessory',
     }
-  ]
+  ],
+  creator: {
+    type: mongoose.Types.ObjectId,
+    ref: 'User'
+  }
 });
 
 const Cube = mongoose.model('Cube', cubeSchema);

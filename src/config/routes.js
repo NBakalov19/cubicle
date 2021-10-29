@@ -4,6 +4,7 @@ const cubeController = require('../controllers/cubeController');
 const accessoryController = require('../controllers/accessoryControler');
 const authController = require('../controllers/authController');
 const { auth } = require('../middlewares/authMiddleware');
+const { errorHandler } = require('../middlewares/errorHandlerMiddleware');
 
 const router = express.Router();
 
@@ -19,4 +20,5 @@ router.use('*', (req, res) => {
 module.exports = (app) => {
   app.use(auth);
   app.use(router);
+  app.use(errorHandler);
 };

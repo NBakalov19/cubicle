@@ -5,8 +5,8 @@ const getAll = () => Cube.find({}).lean();
 const getOne = (cubeId) => Cube.findById(cubeId).lean();
 const getOneDetailed = (cubeId) => Cube.findById(cubeId).populate('accessories').lean();
 
-const create = (name, description, imageUrl, difficulty) => {
-  let cube = new Cube({ name, description, imageUrl, difficulty });
+const create = (name, description, imageUrl, difficulty, userId) => {
+  let cube = new Cube({ name, description, imageUrl, difficulty, creator: userId });
 
   return cube.save();
 };
